@@ -1,0 +1,110 @@
+2023-03-24 19:24:46,747:INFO:Board initialized
+2023-03-24 19:24:46,781:INFO:Pygame initialized
+2023-03-24 19:24:46,971:INFO:Screen initialized
+2023-03-24 19:24:51,808:DEBUG:Mouse click at: (500, 316){(4, 4)}
+2023-03-24 19:24:52,810:DEBUG:Mouse click at: (353, 209){(1, 2)}
+2023-03-24 19:24:53,454:DEBUG:Mouse click at: (441, 295){(3, 4)}
+2023-03-24 19:24:53,666:DEBUG:Mouse click at: (515, 236){(4, 3)}
+2023-03-24 19:24:53,876:DEBUG:Mouse click at: (407, 221){(2, 3)}
+2023-03-24 19:25:03,178:INFO:Mode changed to Intermediate
+2023-03-24 19:25:03,917:DEBUG:Mouse click at: (450, 259){(4, 5)}
+2023-03-24 19:25:05,002:DEBUG:Mouse click at: (723, 556){(11, 12)}
+2023-03-24 19:25:06,041:DEBUG:Mouse click at: (619, 436){(8, 9)}
+2023-03-24 19:25:10,223:DEBUG:Mouse click at: (654, 465){(9, 10)}
+2023-03-24 19:30:23,830:INFO:Board initialized
+2023-03-24 19:30:23,869:INFO:Pygame initialized
+2023-03-24 19:30:24,054:INFO:Screen initialized
+2023-03-24 19:30:25,776:DEBUG:Mouse click at: (445, 246){(3, 3)}
+2023-03-24 19:30:26,371:DEBUG:Mouse click at: (449, 438){(3, 7)}
+2023-03-24 19:30:26,661:DEBUG:Mouse click at: (262, 425){(0, 6)}
+2023-03-24 19:30:29,362:INFO:Mode changed to Beginner
+2023-03-24 19:30:29,741:DEBUG:Mouse click at: (489, 234){(4, 3)}
+2023-03-24 19:30:30,156:DEBUG:Mouse click at: (370, 343){(2, 5)}
+2023-03-24 19:30:30,478:DEBUG:Mouse click at: (336, 260){(1, 3)}
+2023-03-24 19:30:30,962:DEBUG:Mouse click at: (569, 124){(5, 1)}
+2023-03-24 19:30:31,282:DEBUG:Mouse click at: (638, 351){(7, 5)}
+2023-03-24 19:30:32,303:INFO:Mode changed to Beginner
+2023-03-24 19:30:32,728:DEBUG:Mouse click at: (480, 266){(4, 3)}
+2023-03-24 19:30:33,547:DEBUG:Mouse click at: (447, 342){(3, 5)}
+2023-03-24 19:30:34,232:DEBUG:Mouse click at: (494, 387){(4, 6)}
+2023-03-24 19:30:34,977:DEBUG:Mouse click at: (448, 508){(3, 8)}
+2023-03-24 19:30:35,229:DEBUG:Mouse click at: (512, 450){(4, 7)}
+2023-03-24 19:30:35,642:DEBUG:Mouse click at: (588, 458){(6, 7)}
+2023-03-24 19:30:35,843:DEBUG:Mouse click at: (556, 450){(5, 7)}
+2023-03-24 19:30:36,736:DEBUG:Mouse click at: (722, 504){(8, 8)}
+2023-03-24 19:30:37,447:DEBUG:Mouse click at: (620, 198){(6, 2)}
+2023-03-24 19:30:37,831:DEBUG:Mouse click at: (608, 128){(6, 1)}
+2023-03-24 19:30:37,985:DEBUG:Mouse click at: (577, 127){(5, 1)}
+2023-03-24 19:30:38,425:DEBUG:Mouse click at: (465, 88){(3, 0)}
+2023-03-24 19:30:38,605:DEBUG:Mouse click at: (385, 156){(2, 1)}
+2023-03-24 19:30:38,823:DEBUG:Mouse click at: (412, 148){(2, 1)}
+2023-03-24 19:30:39,197:DEBUG:Mouse click at: (498, 158){(4, 1)}
+2023-03-24 19:30:39,555:DEBUG:Mouse click at: (397, 79){(2, 0)}
+2023-03-24 19:30:40,127:DEBUG:Mouse click at: (339, 81){(1, 0)}
+2023-03-24 19:30:42,096:DEBUG:Mouse click at: (706, 143){(8, 1)}
+2023-03-24 19:30:42,441:DEBUG:Mouse click at: (669, 139){(7, 1)}
+2023-03-24 19:30:45,295:INFO:Mode changed to Expert
+2023-03-24 19:30:45,770:DEBUG:Mouse click at: (432, 264){(5, 5)}
+2023-03-24 19:30:46,127:DEBUG:Mouse click at: (758, 420){(12, 9)}
+2023-03-24 19:30:46,418:DEBUG:Mouse click at: (622, 498){(9, 11)}
+2023-03-24 19:30:46,643:DEBUG:Mouse click at: (383, 477){(4, 10)}
+2023-03-24 19:30:46,858:DEBUG:Mouse click at: (261, 413){(1, 9)}
+2023-03-24 19:30:50,204:INFO:Mode changed to Intermediate
+2023-03-24 19:30:50,698:DEBUG:Mouse click at: (457, 276){(4, 5)}
+2023-03-24 19:30:51,052:DEBUG:Mouse click at: (545, 410){(6, 9)}
+2023-03-24 19:30:51,375:DEBUG:Mouse click at: (437, 483){(4, 10)}
+2023-03-24 19:30:51,567:DEBUG:Mouse click at: (377, 437){(2, 9)}
+2023-03-24 19:30:51,778:DEBUG:Mouse click at: (353, 384){(1, 8)}
+2023-03-24 19:30:53,156:DEBUG:Mouse click at: (622, 216){(8, 4)}
+2023-03-24 19:30:54,550:DEBUG:Mouse click at: (626, 347){(8, 7)}
+2023-03-24 19:30:54,775:DEBUG:Mouse click at: (688, 389){(10, 8)}
+2023-03-24 19:30:54,954:DEBUG:Mouse click at: (622, 492){(8, 11)}
+2023-03-24 19:30:55,217:DEBUG:Mouse click at: (560, 330){(7, 7)}
+2023-03-24 19:30:56,528:INFO:Mode changed to Intermediate
+2023-03-24 19:30:57,101:DEBUG:Mouse click at: (495, 284){(5, 5)}
+2023-03-24 19:30:57,471:DEBUG:Mouse click at: (587, 456){(7, 10)}
+2023-03-24 19:30:58,216:DEBUG:Mouse click at: (367, 464){(2, 10)}
+2023-03-24 19:30:58,400:DEBUG:Mouse click at: (262, 533){None}
+2023-03-24 19:30:59,387:DEBUG:Mouse click at: (386, 390){(2, 8)}
+2023-03-24 19:30:59,650:DEBUG:Mouse click at: (409, 438){(3, 9)}
+2023-03-24 19:31:03,837:DEBUG:Mouse click at: (459, 308){(4, 6)}
+2023-03-24 19:31:04,179:DEBUG:Mouse click at: (497, 234){(5, 4)}
+2023-03-24 19:31:04,489:DEBUG:Mouse click at: (495, 266){(5, 5)}
+2023-03-24 19:31:04,755:DEBUG:Mouse click at: (462, 263){(4, 5)}
+2023-03-24 19:31:07,317:DEBUG:Mouse click at: (533, 122){(6, 1)}
+2023-03-24 19:31:07,502:DEBUG:Mouse click at: (530, 139){(6, 2)}
+2023-03-24 19:31:08,737:DEBUG:Mouse click at: (613, 117){(8, 1)}
+2023-03-24 19:31:08,908:DEBUG:Mouse click at: (637, 165){(9, 2)}
+2023-03-24 19:31:09,659:DEBUG:Mouse click at: (728, 121){(11, 1)}
+2023-03-24 19:31:09,876:DEBUG:Mouse click at: (772, 154){(12, 2)}
+2023-03-24 19:31:10,160:DEBUG:Mouse click at: (717, 142){(11, 2)}
+2023-03-24 19:31:11,618:INFO:Mode changed to Intermediate
+2023-03-24 19:32:49,059:INFO:Board initialized
+2023-03-24 19:32:49,091:INFO:Pygame initialized
+2023-03-24 19:32:49,279:INFO:Screen initialized
+2023-03-24 19:32:50,186:DEBUG:Mouse click at: (448, 285){(3, 4)}
+2023-03-24 19:32:51,056:DEBUG:Mouse click at: (643, 491){(7, 8)}
+2023-03-24 19:32:51,656:DEBUG:Mouse click at: (328, 458){(1, 7)}
+2023-03-24 19:32:52,333:DEBUG:Mouse click at: (697, 163){(8, 2)}
+2023-03-24 19:32:52,943:DEBUG:Mouse click at: (379, 110){(2, 1)}
+2023-03-24 19:33:10,044:DEBUG:Mouse click at: (294, 142){(0, 1)}
+2023-03-24 19:33:10,365:DEBUG:Mouse click at: (357, 251){(1, 3)}
+2023-03-24 19:33:10,549:DEBUG:Mouse click at: (327, 186){(1, 2)}
+2023-03-24 19:33:11,119:DEBUG:Mouse click at: (338, 287){(1, 4)}
+2023-03-24 19:33:13,570:DEBUG:Mouse click at: (504, 305){(4, 4)}
+2023-03-24 19:33:13,738:DEBUG:Mouse click at: (571, 302){(5, 4)}
+2023-03-24 19:33:14,083:DEBUG:Mouse click at: (575, 359){(5, 5)}
+2023-03-24 19:33:14,397:DEBUG:Mouse click at: (672, 358){(7, 5)}
+2023-03-24 19:33:14,621:DEBUG:Mouse click at: (626, 302){(6, 4)}
+2023-03-24 19:34:23,658:INFO:Board initialized
+2023-03-24 19:34:23,692:INFO:Pygame initialized
+2023-03-24 19:34:23,890:INFO:Screen initialized
+2023-03-24 19:34:24,660:DEBUG:Mouse click at: (419, 260){(3, 3)}
+2023-03-24 19:34:28,400:INFO:Mode changed to Beginner
+2023-03-24 19:34:28,695:DEBUG:Mouse click at: (396, 214){(2, 2)}
+2023-03-24 19:34:30,444:DEBUG:Mouse click at: (289, 292){(0, 4)}
+2023-03-24 19:34:30,955:DEBUG:Mouse click at: (287, 346){(0, 5)}
+2023-03-24 19:34:31,628:DEBUG:Mouse click at: (330, 371){(1, 5)}
+2023-03-24 19:34:34,161:DEBUG:Mouse click at: (496, 300){(4, 4)}
+2023-03-24 19:34:35,647:DEBUG:Mouse click at: (596, 343){(6, 5)}
+2023-03-24 19:34:36,078:DEBUG:Mouse click at: (654, 490){(7, 8)}

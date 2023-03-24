@@ -1,0 +1,11 @@
+# Define the colors we will use in RGB format
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+GREY = (128, 128, 128)
+DARK_GREY = (64, 64, 64)
+LIGHT_GREY = (192, 192, 192)
+LIGHT_RED = (255, 128, 128)
+DARK_RED = (128, 0, 0)
