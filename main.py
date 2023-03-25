@@ -24,25 +24,29 @@ logging.basicConfig(filename="log.txt", level=logging.DEBUG, format="%(asctime)s
 
 # Initialize the board
 board = Board()
-logging.info("Board initialized")
+logging.info("[+] Board initialized")
 
 # Initialize the game engine
 pygame.init()
-logging.info("Pygame initialized")
+logging.info("[+] Pygame initialized")
 
-mode = "Beginner"
-board.new_board(gm[mode]["grid"], gm[mode]["bombs"])
+settings = {
+    'mode': 'Beginner',
+    'deterministic': True
+}
+
+board.new_board(gm[settings['mode']]["grid"], gm[settings['mode']]["bombs"])
 
 # Set the height and width of the screen
-screen = pygame.display.set_mode(gm[mode]["size"])
-logging.info("Screen initialized")
+screen = pygame.display.set_mode(gm[settings['mode']]["size"])
+logging.info("[+] Screen initialized")
 
 # Set the title of the window
-pygame.display.set_caption("Minesweeper - " + mode + " " + str(board.flags) + "/" + str(board.bombs))
+pygame.display.set_caption("Minesweeper - " + settings['mode'] + " " + str(board.flags) + "/" + str(board.bombs))
  
 # Useful variables
-size = gm[mode]["size"]
-grid_size = gm[mode]["grid_size"]
+size = gm[settings['mode']]["size"]
+grid_size = gm[settings['mode']]["grid_size"]
 grid_start_location = (100 + (size[0] - grid_size[0]) // 2, (size[1] - grid_size[1]) // 2)
 grid_end_location = (grid_start_location[0] + grid_size[0], grid_start_location[1] + grid_size[1])
 
@@ -50,18 +54,17 @@ def change_mode(new_mode):
     """
     Changes the mode of the game
     """
-    global mode
-    mode = new_mode
-    pygame.display.set_mode(gm[mode]["size"])
-    board.new_board(gm[mode]["grid"], gm[mode]["bombs"])
+    settings["mode"] = new_mode
+    pygame.display.set_mode(gm[new_mode]["size"])
+    board.new_board(gm[new_mode]["grid"], gm[new_mode]["bombs"])
 
     global size, grid_size, grid_start_location, grid_end_location  
-    size = gm[mode]["size"]
-    grid_size = gm[mode]["grid_size"]
+    size = gm[new_mode]["size"]
+    grid_size = gm[new_mode]["grid_size"]
     grid_start_location = (100 + (size[0] - grid_size[0]) // 2, (size[1] - grid_size[1]) // 2)
     grid_end_location = (grid_start_location[0] + grid_size[0], grid_start_location[1] + grid_size[1])
 
-    logging.info("Mode changed to " + mode)
+    logging.info("Mode changed to " + new_mode)
 
 def get_grid_pos(pos):
     """
@@ -83,11 +86,16 @@ def get_grid_pos(pos):
     x = (pos[0] - start_x) // len_x
     y = (pos[1] - start_y) // len_y
 
+    if x >= grid[0] or y >= grid[1]:
+        return None
+
     return (x, y)
 
 # Loop until the user clicks the close button.
 done = False
 clock = pygame.time.Clock()
+
+current_time = 0
 
 # -------- Main Program Loop -----------
 while not done:
@@ -119,6 +127,8 @@ while not done:
 
         # User presses a key
         if event.type == pygame.KEYDOWN:
+            logging.debug("Key pressed: " + str(event.key))
+
             if event.key == pygame.K_SPACE:
                 board.new_board(board.grid, board.bombs)
 
@@ -146,14 +156,18 @@ while not done:
             if event.key == pygame.K_e:
                 change_mode("Expert")
 
+            if event.key == pygame.K_d:
+                settings["deterministic"] = not settings["deterministic"]
+
     # --- Game logic should go here
+    pygame.display.set_caption("Minesweeper - " + settings['mode'] + " " + str(board.flags) + "/" + str(board.bombs))
 
     # --- Drawing code should go here
     # First, clear the screen to white. Don't put other drawing commands
     # above this, or they will be erased with this command.
     screen.fill(WHITE)
 
-    Draw().draw(screen, mode, board)
+    Draw().draw(screen, board, settings)
 
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.update()

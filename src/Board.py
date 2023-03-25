@@ -1,15 +1,19 @@
 import random
 import copy
 import logging
+import pygame
 
 class Board:
     class Square:
-        def __init__(self, value):
+        def __init__(self, pos, value):
+            self.pos = pos
+
             self.value = value
             self.revealed = False
             self.flagged = False
 
             self.bomb = (self.value == -1)
+            self.open = not self.bomb
             self.display = (self.value != 0)
 
             self.revealed_adjacent = False
@@ -19,15 +23,19 @@ class Board:
         
         def reveal(self):
             self.revealed = True
+            logging.debug("[+] Square at " + str(self.pos) + " revealed (value: " + str(self.value) + ")")
 
         def unreveal(self):
             self.revealed = False
+            logging.debug("[+] Square at " + str(self.pos) + " unrevealed")
 
         def flag(self):
             self.flagged = True
+            logging.debug("[+] Square at " + str(self.pos) + " flagged")
 
         def unflag(self):
             self.flagged = False
+            logging.debug("[+] Square at " + str(self.pos) + " unflagged")
 
     def __init__(self):
         self.saved_boards = []
@@ -45,7 +53,7 @@ class Board:
         for i in range(grid[0]):
             board.append([])
             for j in range(grid[1]):
-                board[i].append(self.Square(0))
+                board[i].append(self.Square((i, j), 0))
         
         # Choose random locations for bombs
         bomb_indices = [(i // grid[1], i % grid[1]) for i in range(grid[0] * grid[1])]
@@ -54,14 +62,18 @@ class Board:
 
         # Place bombs on board
         for i in bomb_indices:
-            board[i[0]][i[1]] = self.Square(-1)
-                
-        # Place numbers on board
-        for i in range(grid[0]):
-            for j in range(grid[1]):
-                if not board[i][j].bomb:
-                    board[i][j] = self.Square(self.__get_number(board, i, j))
+            board[i[0]][i[1]] = self.Square(i, -1)
+            
+        for i in bomb_indices:
+            for x in range(i[0] - 1, i[0] + 2):
+                for y in range(i[1] - 1, i[1] + 2):
+                    if x < 0 or x >= len(board) or y < 0 or y >= len(board[0]):
+                        continue
+                    else:
+                        if not board[x][y].bomb:
+                            board[x][y].value += 1
 
+        logging.info("[+] Board created")
         return board
     
     def __get_number(self, board, i, j):
@@ -78,35 +90,118 @@ class Board:
                         number += 1
         return number
     
-    def new_board(self, grid, bombs):
+    def new_board(self, grid, bombs, deterministic=False):
         """
         Creates a new board
         """
         self.grid = grid
         self.bombs = bombs
         self.board = self.create_board(grid, bombs)
+        self.start_pos = None
+        while deterministic and self.deterministic():
+            logging.info("[-] Board is not deterministic")
+            self.board = self.create_board(grid, bombs)
         self.flags = 0
         self.game_over = False
         self.won = False
+        self.start_time = None
+        self.end_time = None
+
+    def deterministic(self):
+        """
+        Checks if the board is deterministic
+        """
+        self.start_pos = (random.randint(0, self.grid[0] - 1), random.randint(0, self.grid[1] - 1))
+
+        # Check if the start position is a bomb
+        while self.board[self.start_pos[0]][self.start_pos[1]].bomb or self.board.value != 0:
+            self.start_pos = (random.randint(0, self.grid[0] - 1), random.randint(0, self.grid[1] - 1))
+        
+        # Create a board to solve
+        # '?' = unrevealed
+        # -1 = bomb
+        # 0..8 = revealed
+        self.board_to_solve = []
+        for i in range(self.grid[0]):
+            self.board_to_solve.append([])
+            for j in range(self.grid[1]):
+                self.board_to_solve[i].append('?')
+
+        # Perform a depth-first search
+        stack = [self.start_pos]
+        to_check = []
+        visited = []
+        while stack:
+            pos = stack.pop()
+            if pos in visited:
+                continue
+            visited.append(pos)
+            self.board_to_solve[pos[0]][pos[1]] = self.board.value
+            for x in range(pos[0] - 1, pos[0] + 2):
+                for y in range(pos[1] - 1, pos[1] + 2):
+                    if x < 0 or x >= len(self.board) or y < 0 or y >= len(self.board[0]):
+                        continue
+                    elif (x, y) not in visited:
+                        if self.board.value == 0:
+                            stack.append((x, y))
+                        else:
+                            to_check.append((x, y))
+
+        # Perform a breadth-first search
+        while to_check:
+            to_check_next = []
+            while to_check:
+                pos = to_check.pop(0)
+                if pos in visited:
+                    continue
+                visited.append(pos)
+                self.board_to_solve[pos[0]][pos[1]] = self.board.value
+                number = 0
+                for x in range(pos[0] - 1, pos[0] + 2):
+                    for y in range(pos[1] - 1, pos[1] + 2):
+                        if x < 0 or x >= len(self.board) or y < 0 or y >= len(self.board[0]):
+                            continue
+                        elif self.board_to_solve[x][y] == '?' or self.board_to_solve[x][y] == -1:
+                            number += 1
+                if number == self.board.value:
+                    for x in range(pos[0] - 1, pos[0] + 2):
+                        for y in range(pos[1] - 1, pos[1] + 2):
+                            if x < 0 or x >= len(self.board) or y < 0 or y >= len(self.board[0]):
+                                continue
+                            elif self.board_to_solve[x][y] == '?':
+                                self.board_to_solve[x][y] = -1
+                                to_check_next.append((x, y))
+            to_check = to_check_next
+
+        # Check if the board is deterministic
+        for i in range(self.grid[0]):
+            for j in range(self.grid[1]):
+                if self.board_to_solve[i][j] == '?' and not self.board[i][j].bomb:
+                    return False
+        return True
 
     def reveal_square(self, pos):
         """
         Reveals a square
         """
-        square = self.board[pos[0]][pos[1]] 
+        if self.start_time is None:
+            self.start_time = pygame.time.get_ticks()
+            
+        square = self.board[pos[0]][pos[1]]
         if square.flagged:
             return
         elif not square.revealed:
             square.reveal()
             if square.bomb:
                 self.game_over = True
-            elif not square.display and not square.revealed_adjacent:
+                self.end_time = pygame.time.get_ticks()
+                logging.info("[-] Game over")
+            elif square.value == 0 and not square.revealed_adjacent:
                 square.revealed_adjacent = True
                 self.reveal_adjacent(pos)
-        else:
-            if self.checksum(pos) and not square.revealed_adjacent:
-                square.revealed_adjacent = True
-                self.reveal_adjacent(pos)
+        elif self.checksum(pos) and not square.revealed_adjacent:
+            square.revealed_adjacent = True
+            self.reveal_adjacent(pos)
 
     def reveal_adjacent(self, pos):
         """
@@ -117,16 +212,8 @@ class Board:
                 if x < 0 or x >= len(self.board) or y < 0 or y >= len(self.board[0]):
                     continue
                 else:
-                    square = self.board[x][y]
-                    if square.flagged:
-                        continue
-                    elif not square.revealed:
-                        square.reveal()
-                        if square.bomb:
-                            self.game_over = True
-                        elif not square.display and not square.revealed_adjacent:
-                            square.revealed_adjacent = True
-                            self.reveal_adjacent(pos)
+                    if not self.board[x][y].revealed:
+                        self.reveal_square((x, y))
 
     def flag_square(self, pos):
         """
@@ -160,21 +247,16 @@ class Board:
         """
         Checks if the player has won
         """
-        flags_and_bombs = True
-        for i in range(self.grid[0]):
-            for j in range(self.grid[1]):
-                if self.board[i][j].flagged and not self.board[i][j].bomb:
-                    flags_and_bombs = False
-                elif self.board[i][j].bomb and not self.board[i][j].flagged:
-                    flags_and_bombs = False
-
         reveals_and_bombs = True
         for i in range(self.grid[0]):
             for j in range(self.grid[1]):
                 if not self.board[i][j].revealed and not self.board[i][j].bomb:
                     reveals_and_bombs = False
         
-        self.won = (flags_and_bombs or reveals_and_bombs)
+        self.won = reveals_and_bombs
+
+        if self.won:
+            self.end_time = pygame.time.get_ticks()
 
     def reveal_all(self):
         """
@@ -222,4 +304,4 @@ class Board:
         if self.saved_boards:
             self.board = self.saved_boards.pop()
         else:
-            print("[-] No saved boards")
+            logging.error("[-] No saved boards")

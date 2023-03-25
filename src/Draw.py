@@ -6,21 +6,41 @@ class Draw:
     def __init__(self):
         pass
 
-    def draw(self, screen, mode, board):
-        pygame.display.set_caption("Minesweeper - " + mode + " " + str(board.flags) + "/" + str(board.bombs))
-
+    def draw(self, screen, board, settings):
         self.screen = screen
-        self.mode = mode
+        self.mode = settings["mode"]
         self.board = board
+        self.settings = settings
 
-        self.size = gamemode[mode]["size"]
-        self.grid_size = gamemode[mode]["grid_size"]
+        self.size = gamemode[self.mode]["size"]
+        self.grid_size = gamemode[self.mode]["grid_size"]
         self.grid_start_location = (100 + (self.size[0] - self.grid_size[0]) // 2, (self.size[1] - self.grid_size[1]) // 2)
         self.grid_end_location = (self.grid_start_location[0] + self.grid_size[0], self.grid_start_location[1] + self.grid_size[1])
 
         self.draw_instructions()
         self.draw_labels()
         self.draw_grid()
+
+        self.display_timer()
+
+    def display_timer(self):
+        """
+        Creates and displays the timer
+        """
+        font = pygame.font.SysFont('Arial', 40)
+        if self.board.game_over or self.board.won:
+            start = self.board.start_time
+            end = self.board.end_time
+            time = (end - start) / 1000
+        elif self.board.start_time is not None:
+            start = self.board.start_time
+            current = pygame.time.get_ticks()
+            time = (current - start) / 1000
+        else:
+            time = 0
+
+        text = font.render("{0:.2f} s".format(time).zfill(8), True, BLUE)
+        self.screen.blit(text, [50, self.grid_start_location[1] + 10])
 
     def draw_instructions(self):
         """
@@ -30,16 +50,16 @@ class Draw:
         height = font.get_height() * 3
 
         text = font.render("Left Click - Reveal", True, BLACK)
-        self.screen.blit(text, [10, self.grid_start_location[1] + height * 1 // 2 + 10])
+        self.screen.blit(text, [25, self.grid_start_location[1] + 100 + height * 1 // 2 + 10])
 
         text = font.render("Right Click - Flag", True, BLACK)
-        self.screen.blit(text, [10, self.grid_start_location[1] + height * 3 // 2 + 10])
+        self.screen.blit(text, [25, self.grid_start_location[1] + 100 + height * 3 // 2 + 10])
 
         text = font.render("SPACE - RESET", True, BLACK)
-        self.screen.blit(text, [10, self.grid_start_location[1] + height * 5 // 2 + 10])
+        self.screen.blit(text, [25, self.grid_start_location[1] + 100 + height * 5 // 2 + 10])
 
         text = font.render("Q - Quit", True, BLACK)
-        self.screen.blit(text, [10, self.grid_start_location[1] + height * 7 // 2 + 10])
+        self.screen.blit(text, [25, self.grid_start_location[1] + 100 + height * 7 // 2 + 10])
 
     def draw_labels(self):
         """
@@ -73,19 +93,22 @@ class Draw:
 
         for i in range(grid[0]):
             for j in range(grid[1]):
-                if self.board.board[i][j].flagged:
-                    pygame.draw.rect(self.screen, LIGHT_RED, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
+                if self.board.start_pos is not None and self.board.start_pos == (i, j):
+                    pygame.draw.rect(self.screen, GREEN, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
                 elif self.board.board[i][j].bomb and (self.board.board[i][j].revealed or self.board.game_over):
                     pygame.draw.rect(self.screen, DARK_RED, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
+                elif self.board.board[i][j].flagged:
+                    pygame.draw.rect(self.screen, LIGHT_RED, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
                 elif not self.board.board[i][j].revealed:
                     pygame.draw.rect(self.screen, DARK_GREY, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
-                elif self.board.board[i][j].display:
-                    pygame.draw.rect(self.screen, LIGHT_GREY, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
-                    font = pygame.font.SysFont('Calibri', 25, True, False)
-                    text = font.render(str(self.board.board[i][j].value), True, BLACK)
-                    self.screen.blit(text, [start_x + i * len_x + len_x // 2 - text.get_width() // 2, start_y + j * len_y + len_y // 2 - text.get_height() // 2])
+                elif self.board.start_pos is not None and self.board.start_pos == (i, j):
+                    pygame.draw.rect(self.screen, GREEN, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
                 else:
                     pygame.draw.rect(self.screen, LIGHT_GREY, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
+                    if self.board.board[i][j].value > 0:
+                        font = pygame.font.SysFont('Calibri', 25, True, False)
+                        text = font.render(str(self.board.board[i][j].value), True, BLACK)
+                        self.screen.blit(text, [start_x + i * len_x + len_x // 2 - text.get_width() // 2, start_y + j * len_y + len_y // 2 - text.get_height() // 2])
 
         for x in range(start_x, end_x + 1, len_x):
             pygame.draw.line(self.screen, WHITE, (x, start_y), (x, end_y), 2)
