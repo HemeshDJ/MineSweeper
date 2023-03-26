@@ -2,3 +2,5 @@ __pycache__/
 venv/
 log.txt
 debug.txt
+keybindings.md
+test.py
