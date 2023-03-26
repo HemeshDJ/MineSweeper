@@ -32,7 +32,7 @@ class Draw:
             start = self.board.start_time
             end = self.board.end_time
             time = (end - start) / 1000
-        elif self.board.start_time is not None:
+        elif self.board.playing:
             start = self.board.start_time
             current = pygame.time.get_ticks()
             time = (current - start) / 1000
@@ -93,7 +93,7 @@ class Draw:
 
         for i in range(grid[0]):
             for j in range(grid[1]):
-                if self.board.start_pos is not None and self.board.start_pos == (i, j):
+                if self.board.isdeterministic and self.board.start_pos == (i, j) and not self.board.playing:
                     pygame.draw.rect(self.screen, GREEN, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
                 elif self.board.board[i][j].bomb and (self.board.board[i][j].revealed or self.board.game_over):
                     pygame.draw.rect(self.screen, DARK_RED, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
@@ -101,8 +101,6 @@ class Draw:
                     pygame.draw.rect(self.screen, LIGHT_RED, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
                 elif not self.board.board[i][j].revealed:
                     pygame.draw.rect(self.screen, DARK_GREY, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
-                elif self.board.start_pos is not None and self.board.start_pos == (i, j):
-                    pygame.draw.rect(self.screen, GREEN, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
                 else:
                     pygame.draw.rect(self.screen, LIGHT_GREY, (start_x + i * len_x, start_y + j * len_y, len_x, len_y))
                     if self.board.board[i][j].value > 0:

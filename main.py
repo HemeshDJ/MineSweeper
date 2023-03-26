@@ -32,7 +32,7 @@ logging.info("[+] Pygame initialized")
 
 settings = {
     'mode': 'Beginner',
-    'deterministic': True
+    'deterministic': False
 }
 
 board.new_board(gm[settings['mode']]["grid"], gm[settings['mode']]["bombs"])
@@ -56,7 +56,7 @@ def change_mode(new_mode):
     """
     settings["mode"] = new_mode
     pygame.display.set_mode(gm[new_mode]["size"])
-    board.new_board(gm[new_mode]["grid"], gm[new_mode]["bombs"])
+    board.new_board(gm[new_mode]["grid"], gm[new_mode]["bombs"], settings["deterministic"])
 
     global size, grid_size, grid_start_location, grid_end_location  
     size = gm[new_mode]["size"]
@@ -109,7 +109,7 @@ while not done:
             pos = pygame.mouse.get_pos()
             grid_pos = get_grid_pos(pos)
             
-            logging.debug("Mouse click at: " + str(pos) + "{" + str(grid_pos) + "}")
+            logging.debug("[.] Mouse click at: " + str(pos) + "{" + str(grid_pos) + "}")
 
             if grid_pos is None:
                 continue
@@ -127,10 +127,10 @@ while not done:
 
         # User presses a key
         if event.type == pygame.KEYDOWN:
-            logging.debug("Key pressed: " + str(event.key))
+            logging.debug("[.] Key pressed: " + str(event.key))
 
             if event.key == pygame.K_SPACE:
-                board.new_board(board.grid, board.bombs)
+                board.new_board(board.grid, board.bombs, settings["deterministic"])
 
             if event.key == pygame.K_r:
                 board.reveal_all()
@@ -158,6 +158,8 @@ while not done:
 
             if event.key == pygame.K_d:
                 settings["deterministic"] = not settings["deterministic"]
+                logging.info("[.] Deterministic mode changed to: " + str(settings["deterministic"]))
+                board.new_board(board.grid, board.bombs, settings["deterministic"])
 
     # --- Game logic should go here
     pygame.display.set_caption("Minesweeper - " + settings['mode'] + " " + str(board.flags) + "/" + str(board.bombs))

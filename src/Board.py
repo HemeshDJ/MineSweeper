@@ -98,14 +98,18 @@ class Board:
         self.bombs = bombs
         self.board = self.create_board(grid, bombs)
         self.start_pos = None
+        self.isdeterministic = deterministic
         while deterministic and self.deterministic():
             logging.info("[-] Board is not deterministic")
             self.board = self.create_board(grid, bombs)
         self.flags = 0
         self.game_over = False
         self.won = False
+        self.playing = False
         self.start_time = None
         self.end_time = None
+
+        logging.info("[+] New board created (grid: " + str(grid) + ", bombs: " + str(bombs) + " deterministic: " + str(deterministic) + ")")
 
     def deterministic(self):
         """
@@ -114,7 +118,7 @@ class Board:
         self.start_pos = (random.randint(0, self.grid[0] - 1), random.randint(0, self.grid[1] - 1))
 
         # Check if the start position is a bomb
-        while self.board[self.start_pos[0]][self.start_pos[1]].bomb or self.board.value != 0:
+        while self.board[self.start_pos[0]][self.start_pos[1]].bomb or self.board[self.start_pos[0]][self.start_pos[1]].value != 0:
             self.start_pos = (random.randint(0, self.grid[0] - 1), random.randint(0, self.grid[1] - 1))
         
         # Create a board to solve
@@ -136,13 +140,13 @@ class Board:
             if pos in visited:
                 continue
             visited.append(pos)
-            self.board_to_solve[pos[0]][pos[1]] = self.board.value
+            self.board_to_solve[pos[0]][pos[1]] = self.board[pos[0]][pos[1]].value
             for x in range(pos[0] - 1, pos[0] + 2):
                 for y in range(pos[1] - 1, pos[1] + 2):
                     if x < 0 or x >= len(self.board) or y < 0 or y >= len(self.board[0]):
                         continue
                     elif (x, y) not in visited:
-                        if self.board.value == 0:
+                        if self.board[x][y].value != 0:
                             stack.append((x, y))
                         else:
                             to_check.append((x, y))
@@ -155,7 +159,7 @@ class Board:
                 if pos in visited:
                     continue
                 visited.append(pos)
-                self.board_to_solve[pos[0]][pos[1]] = self.board.value
+                self.board_to_solve[pos[0]][pos[1]] = self.board[pos[0]][pos[1]].value
                 number = 0
                 for x in range(pos[0] - 1, pos[0] + 2):
                     for y in range(pos[1] - 1, pos[1] + 2):
@@ -163,7 +167,7 @@ class Board:
                             continue
                         elif self.board_to_solve[x][y] == '?' or self.board_to_solve[x][y] == -1:
                             number += 1
-                if number == self.board.value:
+                if number == self.board[pos[0]][pos[1]].value:
                     for x in range(pos[0] - 1, pos[0] + 2):
                         for y in range(pos[1] - 1, pos[1] + 2):
                             if x < 0 or x >= len(self.board) or y < 0 or y >= len(self.board[0]):
@@ -184,7 +188,8 @@ class Board:
         """
         Reveals a square
         """
-        if self.start_time is None:
+        if not self.playing:
+            self.playing = True
             self.start_time = pygame.time.get_ticks()
             
         square = self.board[pos[0]][pos[1]]
@@ -219,12 +224,12 @@ class Board:
         """
         Flags a square
         """
-        if self.flags >= self.bombs:
-            logging.info("No more flags available")
-        elif not self.board[pos[0]][pos[1]].revealed:
+        if not self.board[pos[0]][pos[1]].revealed:
             if self.board[pos[0]][pos[1]].flagged:
                 self.board[pos[0]][pos[1]].unflag()
                 self.flags -= 1
+            elif self.flags >= self.bombs:
+                logging.info("[-] No more flags available")
             else:
                 self.board[pos[0]][pos[1]].flag()
                 self.flags += 1
@@ -240,6 +245,10 @@ class Board:
                     continue
                 else:
                     if self.board[x][y].flagged:
+                        if not self.board[x][y].bomb:
+                            self.game_over = True
+                            self.end_time = pygame.time.get_ticks()
+                            return False
                         number += 1
         return (number == self.board[pos[0]][pos[1]].value)
     
